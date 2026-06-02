@@ -1,0 +1,71 @@
+{
+  "gejala": {
+    "G01": "Nafsu makan menurun",
+    "G02": "Lesu",
+    "G03": "Demam",
+    "G04": "Mata berair",
+    "G05": "Mata pucat",
+    "G06": "Hidung mengeluarkan cairan",
+    "G07": "Pernapasan cepat",
+    "G08": "Sesak napas",
+    "G09": "Bulu rontok",
+    "G10": "Kulit bergelombang",
+    "G11": "Luka pada kulit",
+    "G12": "Pincang saat berjalan",
+    "G13": "Luka pada kuku",
+    "G14": "Kuku bengkak",
+    "G15": "Mulut melepuh",
+    "G16": "Diare",
+    "G17": "Perut membesar",
+    "G18": "Tubuh terlalu kurus",
+    "G19": "Tulang rusuk terlihat",
+    "G20": "Gerakan tidak aktif",
+    "G21": "Sulit makan",
+    "G22": "Air liur berlebihan",
+    "G23": "Batuk",
+    "G24": "Berdiri tidak seimbang",
+    "G25": "Bulu kusam"
+  },
+  "penyakit": {
+    "P01": "Penyakit Mulut dan Kuku (PMK)",
+    "P02": "Cacingan",
+    "P03": "Kembung",
+    "P04": "Infeksi Pernapasan",
+    "P05": "Penyakit Kulit",
+    "P06": "Diare",
+    "P07": "Demam",
+    "P08": "Kurus / Malnutrisi",
+    "P09": "Luka pada tubuh",
+    "P10": "Kelainan Kaki / Pincang",
+    "P11": "Mata Tidak Sehat",
+    "P12": "Tidak Layak Kurban",
+    "P13": "Layak Kurban"
+  },
+  "rules": [
+    {
+      "id": "R1",
+      "premis": ["G12", "G13", "G15"],
+      "kesimpulan": "P01"
+    },
+    {
+      "id": "R2",
+      "premis": ["G18", "G19", "G01"],
+      "kesimpulan": "P08"
+    },
+    {
+      "id": "R3",
+      "premis": ["G09", "G10", "G11"],
+      "kesimpulan": "P05"
+    },
+    {
+      "id": "R4",
+      "premis": ["G04", "G06", "G23"],
+      "kesimpulan": "P04"
+    },
+    {
+      "id": "R5",
+      "premis": ["G18", "G19"],
+      "kesimpulan": "P12"
+    }
+  ]
+}
