@@ -24,7 +24,16 @@
     "G22": "Air liur berlebihan",
     "G23": "Batuk",
     "G24": "Berdiri tidak seimbang",
-    "G25": "Bulu kusam"
+    "G25": "Bulu kusam",
+    "G26": "Borok belatungan (myiasis)",
+    "G27": "Kondisi buta / kornea rusak parah",
+    "G28": "Kondisi parah / ambruk / tidak bisa jalan",
+    "G29": "Gigi belum ganti / belum poel (umur < 2 tahun)",
+    "G30": "Gigi sudah ganti / poel (umur >= 2 tahun)",
+    "G31": "Testis sangklir (cuma satu)",
+    "G32": "Ekor putus ekstrem",
+    "G33": "Pincang ringan",
+    "G34": "Luka gores luar"
   },
   "penyakit": {
     "P01": "Penyakit Mulut dan Kuku (PMK)",
@@ -44,28 +53,118 @@
   "rules": [
     {
       "id": "R1",
-      "premis": ["G12", "G13", "G15"],
+      "premis": ["G12", "G13", "G15", "G22"],
       "kesimpulan": "P01"
     },
     {
       "id": "R2",
-      "premis": ["G18", "G19", "G01"],
-      "kesimpulan": "P08"
+      "premis": ["G01", "G19", "G25"],
+      "kesimpulan": "P02"
     },
     {
       "id": "R3",
-      "premis": ["G09", "G10", "G11"],
-      "kesimpulan": "P05"
+      "premis": ["G17", "G20"],
+      "kesimpulan": "P03"
     },
     {
       "id": "R4",
-      "premis": ["G04", "G06", "G23"],
+      "premis": ["G06", "G07", "G23"],
       "kesimpulan": "P04"
     },
     {
       "id": "R5",
+      "premis": ["G10", "G11"],
+      "kesimpulan": "P05"
+    },
+    {
+      "id": "R6",
+      "premis": ["G16", "G02"],
+      "kesimpulan": "P06"
+    },
+    {
+      "id": "R7",
+      "premis": ["G03", "G24"],
+      "kesimpulan": "P07"
+    },
+    {
+      "id": "R8",
+      "premis": ["G18", "G19"],
+      "kesimpulan": "P08"
+    },
+    {
+      "id": "R9",
+      "premis": ["G11", "G26"],
+      "kesimpulan": "P09"
+    },
+    {
+      "id": "R10",
+      "premis": ["G12", "G14"],
+      "kesimpulan": "P10"
+    },
+    {
+      "id": "R11a",
+      "premis": ["G04"],
+      "kesimpulan": "P11"
+    },
+    {
+      "id": "R11b",
+      "premis": ["G05"],
+      "kesimpulan": "P11"
+    },
+    {
+      "id": "R12",
       "premis": ["G18", "G19"],
       "kesimpulan": "P12"
+    },
+    {
+      "id": "R13",
+      "premis": ["G27"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R14",
+      "premis": ["G28"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R15a",
+      "premis": ["G12", "G13", "G15", "G22"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R15b",
+      "premis": ["G10", "G11"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R16",
+      "premis": ["G29"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R17a",
+      "premis": ["G31"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R17b",
+      "premis": ["G32"],
+      "kesimpulan": "P12"
+    },
+    {
+      "id": "R18",
+      "premis": ["G30"],
+      "kesimpulan": "P13"
+    },
+    {
+      "id": "R19a",
+      "premis": ["G30", "G33"],
+      "kesimpulan": "P13"
+    },
+    {
+      "id": "R19b",
+      "premis": ["G30", "G34"],
+      "kesimpulan": "P13"
     }
   ]
 }
