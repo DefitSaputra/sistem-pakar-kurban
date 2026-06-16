@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import Home       from './components/Home.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import Step1Syarat from './components/steps/Step1Syarat.vue'
@@ -50,7 +51,15 @@ const reset = () => {
 // ─── Diagnosis ────────────────────────────────────────────────────────────────
 const analisis = async () => {
   if (!gejalaTerpilih.value.length) {
-    alert('Mohon pilih minimal satu gejala fisik terlebih dahulu.')
+    Swal.fire({
+      icon: 'warning',
+      title: 'Belum Ada Gejala Dipilih',
+      text: 'Mohon pilih minimal satu gejala fisik terlebih dahulu.',
+      confirmButtonText: 'Mengerti',
+      confirmButtonColor: '#065f46',
+      background: '#fff',
+      customClass: { popup: 'swal-rounded' }
+    })
     return
   }
   isLoading.value = true
@@ -62,7 +71,15 @@ const analisis = async () => {
     pesanSistem.value   = res.data.pesan
     currentStep.value   = 5
   } catch {
-    alert('Terjadi gangguan pada server backend. Pastikan uvicorn sudah berjalan.')
+    Swal.fire({
+      icon: 'error',
+      title: 'Koneksi Gagal',
+      text: 'Terjadi gangguan pada server backend. Pastikan uvicorn sudah berjalan.',
+      confirmButtonText: 'Tutup',
+      confirmButtonColor: '#065f46',
+      background: '#fff',
+      customClass: { popup: 'swal-rounded' }
+    })
   } finally {
     isLoading.value = false
   }
@@ -73,30 +90,58 @@ const analisis = async () => {
   <div class="flex flex-col lg:flex-row h-screen bg-white font-sans antialiased text-slate-900 overflow-hidden">
 
     <!-- ═══════════════════ SIDEBAR KIRI ═══════════════════ -->
-    <aside class="w-full lg:w-[28%] xl:w-[26%] bg-emerald-950 flex flex-col px-10 py-10 text-white flex-shrink-0">
+    <aside class="w-full lg:w-[28%] xl:w-[26%] bg-[#0a2a1f] flex flex-col px-8 py-9 text-white flex-shrink-0 border-r border-emerald-900/40">
+
       <!-- Logo -->
       <button @click="reset" class="flex items-center gap-3 mb-2 group w-fit">
-        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-xl shadow-lg group-hover:scale-105 transition-transform">🏆</div>
+        <!-- Cow + Star icon -->
+        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
+          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3c-.55 0-1.08.1-1.58.27L15.5 2l-1.5 1.5L15 4.7A5.97 5.97 0 0 0 13 9v1H5a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1v2a1 1 0 0 0 2 0v-2h8v2a1 1 0 0 0 2 0v-2h1a3 3 0 0 0 3-3v-2c0-.9-.4-1.71-1-2.27V9a5.97 5.97 0 0 0-2-4.3L17 3.5 15.5 2l1.92 1.27A5.96 5.96 0 0 0 19 3zM8 13a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm8 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+        </div>
         <h1 class="text-[22px] font-black tracking-tighter">PRIME<span class="text-emerald-400">COW</span></h1>
       </button>
-      <p class="text-emerald-400/50 text-[10px] font-bold tracking-[0.2em] mb-10">EXPERT DIAGNOSTIC PLATFORM</p>
+      <p class="text-emerald-500/60 text-[10px] font-bold tracking-[0.2em] mb-10">EXPERT DIAGNOSTIC PLATFORM</p>
+
+      <!-- Divider -->
+      <div class="h-px bg-emerald-900/50 mb-8 -mx-2"></div>
 
       <!-- ProgressBar stepper (only during steps 1-4) -->
       <ProgressBar v-if="currentStep > 0 && currentStep <= 4" :currentStep="currentStep" :steps="steps" />
 
       <!-- Idle state (Home / Result) -->
-      <div v-else class="flex-1 flex flex-col items-center justify-center text-center opacity-60 py-8">
-        <span class="text-5xl mb-3">🛡️</span>
-        <p class="font-bold text-emerald-100 text-sm">Kurban Aman & Sehat</p>
-        <p class="text-emerald-400/70 text-[11px] mt-2 max-w-[190px] leading-relaxed">
+      <div v-else class="flex-1 flex flex-col items-center justify-center text-center py-8">
+        <!-- Shield icon -->
+        <div class="w-20 h-20 rounded-2xl bg-emerald-900/60 border border-emerald-700/40 flex items-center justify-center mb-5 shadow-inner">
+          <svg class="w-10 h-10 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V7L12 2z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <p class="font-bold text-emerald-100 text-sm tracking-wide">Kurban Aman & Sehat</p>
+        <p class="text-emerald-500/70 text-[11px] mt-2.5 max-w-[190px] leading-relaxed">
           Memastikan setiap hewan kurban memenuhi standar syariat dan medis.
         </p>
+
+        <!-- Stats row -->
+        <div class="mt-8 grid grid-cols-2 gap-3 w-full max-w-[200px]">
+          <div class="bg-emerald-900/50 border border-emerald-800/50 rounded-xl p-3 text-center">
+            <div class="text-emerald-400 font-black text-lg leading-none">34</div>
+            <div class="text-emerald-600 text-[9px] font-bold uppercase tracking-wide mt-1">Gejala</div>
+          </div>
+          <div class="bg-emerald-900/50 border border-emerald-800/50 rounded-xl p-3 text-center">
+            <div class="text-emerald-400 font-black text-lg leading-none">11</div>
+            <div class="text-emerald-600 text-[9px] font-bold uppercase tracking-wide mt-1">Penyakit</div>
+          </div>
+        </div>
       </div>
 
       <!-- Footer watermark -->
-      <div class="opacity-10 pointer-events-none select-none mt-auto">
-        <div class="text-3xl font-black italic tracking-tighter">KELOMPOK 8</div>
-        <div class="text-sm font-light tracking-widest mt-0.5">INFORMATIKA UNSOED</div>
+      <div class="opacity-10 pointer-events-none select-none mt-auto pt-6">
+        <div class="h-px bg-white/20 mb-4"></div>
+        <div class="text-2xl font-black italic tracking-tighter">KELOMPOK 8</div>
+        <div class="text-xs font-light tracking-widest mt-0.5">INFORMATIKA UNSOED</div>
       </div>
     </aside>
 
@@ -104,7 +149,7 @@ const analisis = async () => {
     <main class="flex-1 flex flex-col bg-slate-50 overflow-hidden min-h-0">
 
       <!-- Header -->
-      <header class="flex-shrink-0 h-[76px] px-10 flex items-center justify-between bg-white border-b border-slate-200/60">
+      <header class="flex-shrink-0 h-[72px] px-10 flex items-center justify-between bg-white border-b border-slate-100 shadow-sm">
         <div>
           <p class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">
             {{ currentStep === 0 ? 'Beranda' : currentStep <= 4 ? 'Fase Observasi' : 'Laporan Akhir' }}
@@ -113,11 +158,7 @@ const analisis = async () => {
             {{ currentStep === 0 ? 'Platform Diagnostik' : currentStep <= 4 ? steps[currentStep - 1]?.title : 'Hasil Diagnosis Klinis' }}
           </h2>
         </div>
-        <div class="flex items-center gap-3 text-[11px] text-slate-400 font-medium">
-          <span>Kelompok 8</span>
-          <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
-          <span>v2.0</span>
-        </div>
+        <span class="text-[11px] text-slate-400 font-medium">Kelompok 8 &mdash; Informatika UNSOED</span>
       </header>
 
       <!-- Scrollable viewport -->
@@ -135,14 +176,14 @@ const analisis = async () => {
       <!-- Navigation Footer (Steps 1-4 only) -->
       <footer
         v-if="currentStep > 0 && currentStep <= 4"
-        class="flex-shrink-0 absolute bottom-0 right-0 left-0 lg:left-[28%] xl:left-[26%] h-[84px] bg-white/90 backdrop-blur-md border-t border-slate-200/60 px-10 flex items-center justify-between z-20"
+        class="flex-shrink-0 absolute bottom-0 right-0 left-0 lg:left-[28%] xl:left-[26%] h-[80px] bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] px-10 flex items-center justify-between z-20"
       >
         <button
           @click="prevStep"
           :class="currentStep === 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
           class="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-900 active:scale-95 transition-all duration-200"
         >
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
           Kembali
@@ -159,17 +200,23 @@ const analisis = async () => {
         <button
           v-if="currentStep < 4"
           @click="nextStep"
-          class="px-8 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-lg shadow-emerald-700/20 hover:shadow-xl active:scale-95 transition-all duration-300"
+          class="group px-7 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-lg shadow-emerald-700/25 hover:shadow-xl active:scale-95 transition-all duration-300 flex items-center gap-2"
         >
           Lanjut Pemeriksaan
+          <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
         </button>
         <button
           v-else
           @click="analisis"
           :disabled="isLoading"
-          class="px-8 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold rounded-xl text-sm shadow-lg active:scale-95 transition-all duration-300 flex items-center gap-2.5"
+          class="px-7 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold rounded-xl text-sm shadow-lg active:scale-95 transition-all duration-300 flex items-center gap-2.5"
         >
           <span v-if="isLoading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+          </svg>
           Finalisasi Diagnosa
         </button>
       </footer>
