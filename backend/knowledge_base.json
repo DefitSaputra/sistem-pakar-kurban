@@ -46,125 +46,374 @@
     "P08": "Kurus / Malnutrisi",
     "P09": "Luka pada tubuh",
     "P10": "Kelainan Kaki / Pincang",
-    "P11": "Mata Tidak Sehat",
-    "P12": "Tidak Layak Kurban",
-    "P13": "Layak Kurban"
+    "P11": "Mata Tidak Sehat"
   },
-  "rules": [
+  "status_kurban": {
+    "K01": "Layak Kurban",
+    "K02": "Tidak Layak Kurban"
+  },
+  "rules_diagnosis": [
     {
       "id": "R1",
       "premis": ["G12", "G13", "G15", "G22"],
-      "kesimpulan": "P01"
+      "kesimpulan": "P01",
+      "keterangan": "Penyakit Mulut dan Kuku - gejala lengkap"
     },
     {
       "id": "R2",
       "premis": ["G01", "G19", "G25"],
-      "kesimpulan": "P02"
+      "kesimpulan": "P02",
+      "keterangan": "Cacingan - gejala utama"
     },
     {
       "id": "R3",
       "premis": ["G17", "G20"],
-      "kesimpulan": "P03"
+      "kesimpulan": "P03",
+      "keterangan": "Kembung - perut membesar dan tidak aktif"
     },
     {
       "id": "R4",
       "premis": ["G06", "G07", "G23"],
-      "kesimpulan": "P04"
+      "kesimpulan": "P04",
+      "keterangan": "Infeksi Pernapasan - hidung berair, napas cepat, batuk"
     },
     {
       "id": "R5",
       "premis": ["G10", "G11"],
-      "kesimpulan": "P05"
+      "kesimpulan": "P05",
+      "keterangan": "Penyakit Kulit - kulit bergelombang dan luka"
     },
     {
       "id": "R6",
       "premis": ["G16", "G02"],
-      "kesimpulan": "P06"
+      "kesimpulan": "P06",
+      "keterangan": "Diare - diare disertai lesu"
     },
     {
       "id": "R7",
       "premis": ["G03", "G24"],
-      "kesimpulan": "P07"
+      "kesimpulan": "P07",
+      "keterangan": "Demam - demam disertai tidak seimbang"
     },
     {
       "id": "R8",
       "premis": ["G18", "G19"],
-      "kesimpulan": "P08"
+      "kesimpulan": "P08",
+      "keterangan": "Kurus/Malnutrisi - tubuh kurus dan tulang rusuk terlihat"
     },
     {
       "id": "R9",
       "premis": ["G11", "G26"],
-      "kesimpulan": "P09"
+      "kesimpulan": "P09",
+      "keterangan": "Luka pada tubuh - luka kulit disertai myiasis"
     },
     {
       "id": "R10",
       "premis": ["G12", "G14"],
-      "kesimpulan": "P10"
+      "kesimpulan": "P10",
+      "keterangan": "Kelainan Kaki/Pincang - pincang dan kuku bengkak"
     },
     {
       "id": "R11a",
       "premis": ["G04"],
-      "kesimpulan": "P11"
+      "kesimpulan": "P11",
+      "keterangan": "Mata Tidak Sehat - mata berair"
     },
     {
       "id": "R11b",
       "premis": ["G05"],
-      "kesimpulan": "P11"
+      "kesimpulan": "P11",
+      "keterangan": "Mata Tidak Sehat - mata pucat"
     },
     {
-      "id": "R12",
-      "premis": ["G18", "G19"],
-      "kesimpulan": "P12"
+      "id": "R11c",
+      "premis": ["G04", "G05"],
+      "kesimpulan": "P11",
+      "keterangan": "Mata Tidak Sehat - mata berair dan pucat"
     },
     {
-      "id": "R13",
+      "id": "R11d",
       "premis": ["G27"],
-      "kesimpulan": "P12"
+      "kesimpulan": "P11",
+      "keterangan": "Mata Tidak Sehat - buta/kornea rusak parah"
     },
     {
-      "id": "R14",
-      "premis": ["G28"],
-      "kesimpulan": "P12"
+      "id": "R12a",
+      "premis": ["G01", "G02", "G25"],
+      "kesimpulan": "P02",
+      "keterangan": "Cacingan - nafsu makan turun, lesu, bulu kusam"
+    },
+    {
+      "id": "R12b",
+      "premis": ["G01", "G18", "G25"],
+      "kesimpulan": "P02",
+      "keterangan": "Cacingan - nafsu makan turun, kurus, bulu kusam"
+    },
+    {
+      "id": "R12c",
+      "premis": ["G02", "G18", "G19"],
+      "kesimpulan": "P02",
+      "keterangan": "Cacingan - lesu, kurus, tulang rusuk terlihat"
+    },
+    {
+      "id": "R13a",
+      "premis": ["G17", "G01"],
+      "kesimpulan": "P03",
+      "keterangan": "Kembung - perut membesar dan nafsu makan menurun"
+    },
+    {
+      "id": "R13b",
+      "premis": ["G17", "G21"],
+      "kesimpulan": "P03",
+      "keterangan": "Kembung - perut membesar dan sulit makan"
+    },
+    {
+      "id": "R14a",
+      "premis": ["G07", "G08"],
+      "kesimpulan": "P04",
+      "keterangan": "Infeksi Pernapasan - napas cepat dan sesak"
+    },
+    {
+      "id": "R14b",
+      "premis": ["G06", "G08", "G23"],
+      "kesimpulan": "P04",
+      "keterangan": "Infeksi Pernapasan - hidung berair, sesak, batuk"
+    },
+    {
+      "id": "R14c",
+      "premis": ["G07", "G23"],
+      "kesimpulan": "P04",
+      "keterangan": "Infeksi Pernapasan - napas cepat dan batuk"
+    },
+    {
+      "id": "R14d",
+      "premis": ["G06", "G07"],
+      "kesimpulan": "P04",
+      "keterangan": "Infeksi Pernapasan - hidung berair dan napas cepat"
     },
     {
       "id": "R15a",
-      "premis": ["G12", "G13", "G15", "G22"],
-      "kesimpulan": "P12"
+      "premis": ["G09", "G10"],
+      "kesimpulan": "P05",
+      "keterangan": "Penyakit Kulit - bulu rontok dan kulit bergelombang"
     },
     {
       "id": "R15b",
-      "premis": ["G10", "G11"],
-      "kesimpulan": "P12"
+      "premis": ["G09", "G11"],
+      "kesimpulan": "P05",
+      "keterangan": "Penyakit Kulit - bulu rontok dan luka pada kulit"
     },
     {
-      "id": "R16",
-      "premis": ["G29"],
-      "kesimpulan": "P12"
+      "id": "R15c",
+      "premis": ["G26"],
+      "kesimpulan": "P09",
+      "keterangan": "Luka pada tubuh - myiasis (borok belatungan)"
+    },
+    {
+      "id": "R16a",
+      "premis": ["G16", "G01"],
+      "kesimpulan": "P06",
+      "keterangan": "Diare - diare dan nafsu makan menurun"
+    },
+    {
+      "id": "R16b",
+      "premis": ["G16", "G03"],
+      "kesimpulan": "P06",
+      "keterangan": "Diare - diare disertai demam"
     },
     {
       "id": "R17a",
-      "premis": ["G31"],
-      "kesimpulan": "P12"
+      "premis": ["G03", "G01"],
+      "kesimpulan": "P07",
+      "keterangan": "Demam - demam dan nafsu makan menurun"
     },
     {
       "id": "R17b",
-      "premis": ["G32"],
-      "kesimpulan": "P12"
+      "premis": ["G03", "G02"],
+      "kesimpulan": "P07",
+      "keterangan": "Demam - demam dan lesu"
     },
     {
-      "id": "R18",
-      "premis": ["G30"],
-      "kesimpulan": "P13"
+      "id": "R17c",
+      "premis": ["G03", "G20"],
+      "kesimpulan": "P07",
+      "keterangan": "Demam - demam dan tidak aktif"
+    },
+    {
+      "id": "R18a",
+      "premis": ["G18", "G01"],
+      "kesimpulan": "P08",
+      "keterangan": "Kurus/Malnutrisi - kurus dan nafsu makan menurun"
+    },
+    {
+      "id": "R18b",
+      "premis": ["G19", "G25"],
+      "kesimpulan": "P08",
+      "keterangan": "Kurus/Malnutrisi - tulang rusuk terlihat dan bulu kusam"
     },
     {
       "id": "R19a",
-      "premis": ["G30", "G33"],
-      "kesimpulan": "P13"
+      "premis": ["G13", "G14"],
+      "kesimpulan": "P10",
+      "keterangan": "Kelainan Kaki - luka kuku dan bengkak"
     },
     {
       "id": "R19b",
+      "premis": ["G12", "G13"],
+      "kesimpulan": "P01",
+      "keterangan": "PMK - pincang dan luka kuku (gejala awal PMK)"
+    },
+    {
+      "id": "R19c",
+      "premis": ["G15", "G22"],
+      "kesimpulan": "P01",
+      "keterangan": "PMK - mulut melepuh dan air liur berlebihan"
+    },
+    {
+      "id": "R19d",
+      "premis": ["G15", "G21"],
+      "kesimpulan": "P01",
+      "keterangan": "PMK - mulut melepuh dan sulit makan"
+    },
+    {
+      "id": "R20a",
+      "premis": ["G33"],
+      "kesimpulan": "P10",
+      "keterangan": "Kelainan Kaki - pincang ringan"
+    },
+    {
+      "id": "R20b",
+      "premis": ["G33", "G13"],
+      "kesimpulan": "P10",
+      "keterangan": "Kelainan Kaki - pincang ringan dengan luka kuku"
+    },
+    {
+      "id": "R21a",
+      "premis": ["G34"],
+      "kesimpulan": "P09",
+      "keterangan": "Luka pada tubuh - luka gores luar"
+    },
+    {
+      "id": "R21b",
+      "premis": ["G34", "G11"],
+      "kesimpulan": "P09",
+      "keterangan": "Luka pada tubuh - luka gores dan luka kulit"
+    }
+  ],
+  "rules_kelayakan": [
+    {
+      "id": "RK1",
+      "premis": ["G18", "G19"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - tubuh kurus ekstrem dan tulang rusuk terlihat"
+    },
+    {
+      "id": "RK2",
+      "premis": ["G27"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - buta / kornea rusak parah"
+    },
+    {
+      "id": "RK3",
+      "premis": ["G28"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - kondisi parah / ambruk / tidak bisa jalan"
+    },
+    {
+      "id": "RK4",
+      "premis": ["G12", "G13", "G15", "G22"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - gejala lengkap PMK berat"
+    },
+    {
+      "id": "RK5",
+      "premis": ["G10", "G11"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - penyakit kulit parah"
+    },
+    {
+      "id": "RK6",
+      "premis": ["G29"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - umur belum cukup (gigi belum poel)"
+    },
+    {
+      "id": "RK7a",
+      "premis": ["G31"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - testis sangklir"
+    },
+    {
+      "id": "RK7b",
+      "premis": ["G32"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - ekor putus ekstrem"
+    },
+    {
+      "id": "RK8",
+      "premis": ["G26"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - borok belatungan parah (myiasis)"
+    },
+    {
+      "id": "RK9",
+      "premis": ["G15", "G22", "G12", "G13"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - PMK dengan pincang dan luka kuku"
+    },
+    {
+      "id": "RK10",
+      "premis": ["G18", "G01", "G25"],
+      "kesimpulan": "K02",
+      "keterangan": "Tidak Layak - malnutrisi berat (kurus, tidak makan, bulu kusam)"
+    },
+    {
+      "id": "RK11",
+      "premis": ["G30"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup (gigi sudah poel)"
+    },
+    {
+      "id": "RK12",
+      "premis": ["G30", "G33"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, pincang ringan (masih diperbolehkan)"
+    },
+    {
+      "id": "RK13",
       "premis": ["G30", "G34"],
-      "kesimpulan": "P13"
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, luka gores ringan (masih diperbolehkan)"
+    },
+    {
+      "id": "RK14",
+      "premis": ["G30", "G04"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, mata sedikit berair tapi tidak buta"
+    },
+    {
+      "id": "RK15",
+      "premis": ["G30", "G03"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, demam ringan bisa sembuh sebelum penyembelihan"
+    },
+    {
+      "id": "RK16",
+      "premis": ["G30", "G23"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, batuk ringan"
+    },
+    {
+      "id": "RK17",
+      "premis": ["G30", "G06"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, hidung berair ringan"
+    },
+    {
+      "id": "RK18",
+      "premis": ["G30", "G16"],
+      "kesimpulan": "K01",
+      "keterangan": "Layak - umur cukup, diare ringan"
     }
   ]
 }

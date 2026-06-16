@@ -1,16 +1,19 @@
 import json
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 from typing import List
 
 # Inisialisasi Aplikasi FastAPI
-app = FastAPI(title="API Sistem Pakar Sapi Kurban")
+app = FastAPI(title="API Sistem Pakar Sapi Kurban - PrimeCow v2")
 
 # Konfigurasi CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,94 +23,144 @@ app.add_middleware(
 with open("knowledge_base.json", "r") as file:
     kb = json.load(file)
 
-penyakit_db = kb["penyakit"]
-rules_db = kb["rules"]
+penyakit_db       = kb["penyakit"]
+status_kurban_db  = kb["status_kurban"]
+rules_diagnosis   = kb["rules_diagnosis"]
+rules_kelayakan   = kb["rules_kelayakan"]
 
 # Skema Data Input dari Frontend
 class GejalaInput(BaseModel):
     gejala: List[str]
 
-# Algoritma Forward Chaining (Tetap Utuh Sesuai Source Code Asli Anda)
-def jalankan_forward_chaining(input_gejala: set):
-    hasil_penyakit = []
-    
-    # Looping mengecek setiap rule
-    for rule in rules_db:
-        # Jika premis rule adalah himpunan bagian (subset) dari input gejala
+
+# ===========================================================================
+# MESIN INFERENSI UTAMA - DUAL ENGINE
+# Engine 1: Forward Chaining Eksak (issubset) — Prioritas Pertama
+# Engine 2: Scoring System Parsial (>60%)    — Prioritas Kedua (fallback)
+# ===========================================================================
+def jalankan_diagnosa(input_gejala: set):
+    penyakit_klinis_ids = set(penyakit_db.keys())  # P01 - P11
+
+    # ------------------------------------------------------------------
+    # FASE 1 — Evaluasi Status Kelayakan Kurban (K01 / K02) secara Eksak
+    # Kelayakan selalu dievaluasi dengan pencocokan eksak, tidak pakai scoring
+    # ------------------------------------------------------------------
+    kelayakan_terdeteksi = set()
+    for rule in rules_kelayakan:
+        kesimpulan = rule["kesimpulan"]
         if set(rule["premis"]).issubset(input_gejala):
-            kode_penyakit = rule["kesimpulan"]
-            
-            # Tambahkan ke hasil jika belum ada
-            hasil = {
-                "kode": kode_penyakit,
-                "nama": penyakit_db.get(kode_penyakit, "Tidak Diketahui")
-            }
-            if hasil not in hasil_penyakit:
-                hasil_penyakit.append(hasil)
-                
-    return hasil_penyakit
+            kelayakan_terdeteksi.add(kesimpulan)
 
-# --- ENDPOINT ---
+    # ------------------------------------------------------------------
+    # FASE 2A — Pencocokan Eksak Penyakit Klinis (Prioritas Pertama)
+    # ------------------------------------------------------------------
+    penyakit_eksak = set()
+    for rule in rules_diagnosis:
+        kesimpulan = rule["kesimpulan"]
+        if kesimpulan in penyakit_klinis_ids:
+            if set(rule["premis"]).issubset(input_gejala):
+                penyakit_eksak.add(kesimpulan)
 
-# 1. Endpoint Beranda (Mencegah 404 Not Found)
-@app.get("/")
-def beranda():
-    return {"pesan": "Selamat datang di API Sistem Pakar Sapi Kurban Kelompok 8!"}
-
-# 2. Endpoint untuk mengambil daftar gejala (Untuk dirender di Frontend)
-@app.get("/api/gejala")
-def get_daftar_gejala():
-    daftar_gejala = [{"kode": k, "nama": v} for k, v in kb["gejala"].items()]
-    return {
-        "status": "success",
-        "data": daftar_gejala
-    }
-
-# --- ENDPOINT UTAMA (DISESUAIKAN AGAR TERSTRUKTUR & VALID) ---
-
-# 3. Endpoint API Diagnosa
-@app.post("/api/diagnosa")
-def diagnosa_sapi(data: GejalaInput):
-    # Ubah list input menjadi set agar mudah dicocokkan dengan operasi himpunan
-    gejala_set = set(data.gejala)
-    
-    # Jalankan mesin inferensi forward chaining dasar
-    hasil_raw = jalankan_forward_chaining(gejala_set)
-    
-    # Ekstrak semua kode kesimpulan yang berhasil dikumpulkan oleh mesin
-    kode_kesimpulan = {h["kode"] for h in hasil_raw}
-    
-    # [LOGIKA EKSKLUSI KHUSUS - FILTER NOT & KONFLIK KELAYAKAN]
-    # Jika terdeteksi penyakit berat (P01, P05, P08, P11) ATAU status Tidak Layak (P12),
-    # maka status Layak Kurban (P13) otomatis dibatalkan/dihapus agar tidak kontradiktif.
-    penyakit_berat = {"P01", "P05", "P08", "P11"}
-    if "P12" in kode_kesimpulan or (kode_kesimpulan & penyakit_berat):
-        if "P13" in kode_kesimpulan:
-            kode_kesimpulan.remove("P13")
-            
-    # Pemisahan hasil akhir menjadi dua kategori terstruktur
     penyakit_terdeteksi = []
-    status_kelayakan = []
-    
-    for kode in kode_kesimpulan:
-        nama_kondisi = penyakit_db.get(kode, "Tidak Diketahui")
-        obj_hasil = {"kode": kode, "nama": nama_kondisi}
-        
-        if kode in ["P12", "P13"]:
-            status_kelayakan.append(obj_hasil)
-        else:
-            penyakit_terdeteksi.append(obj_hasil)
-            
-    # Penentuan teks pesan kesimpulan yang akurat dan tidak bertubrukan
-    if "P12" in kode_kesimpulan:
+
+    if penyakit_eksak:
+        # Ada pencocokan eksak — gunakan hasilnya
+        for kode in penyakit_eksak:
+            penyakit_terdeteksi.append({
+                "kode": kode,
+                "nama": penyakit_db.get(kode, "Tidak Diketahui"),
+                "is_indikasi": False,
+                "persentase": 100.0
+            })
+    else:
+        # ------------------------------------------------------------------
+        # FASE 2B — Scoring Parsial (Prioritas Kedua / Fallback)
+        # Hitung % kecocokan gejala input vs premis setiap aturan klinis
+        # Hanya ambil hasil dengan skor tertinggi yang melebihi threshold 60%
+        # ------------------------------------------------------------------
+        semua_skor = []
+        for rule in rules_diagnosis:
+            kesimpulan = rule["kesimpulan"]
+            if kesimpulan in penyakit_klinis_ids:
+                premis_set = set(rule["premis"])
+                if len(premis_set) > 0:
+                    cocok = len(premis_set.intersection(input_gejala))
+                    skor = (cocok / len(premis_set)) * 100
+                    if skor > 60.0:
+                        semua_skor.append((kesimpulan, skor))
+
+        if semua_skor:
+            skor_tertinggi = max(item[1] for item in semua_skor)
+            hasil_terbaik = [item for item in semua_skor if item[1] == skor_tertinggi]
+
+            for kode, skor in hasil_terbaik:
+                nama_asli = penyakit_db.get(kode, "Tidak Diketahui")
+                penyakit_terdeteksi.append({
+                    "kode": kode,
+                    "nama": f"{nama_asli} (Indikasi: {skor:.0f}%)",
+                    "is_indikasi": True,
+                    "persentase": round(skor, 1)
+                })
+
+    # ------------------------------------------------------------------
+    # FASE 3 — Logika Eksklusi Kelayakan
+    # K01 (Layak) WAJIB dibatalkan jika:
+    #   - K02 (Tidak Layak) terdeteksi secara eksak, ATAU
+    #   - Penyakit berat (P01, P05, P08, P11) terdeteksi (eksak atau indikasi)
+    # ------------------------------------------------------------------
+    penyakit_berat = {"P01", "P05", "P08", "P11"}
+    ada_penyakit_berat = any(p["kode"] in penyakit_berat for p in penyakit_terdeteksi)
+
+    if "K02" in kelayakan_terdeteksi or ada_penyakit_berat:
+        kelayakan_terdeteksi.discard("K01")
+        kelayakan_terdeteksi.add("K02")
+
+    # ------------------------------------------------------------------
+    # FASE 4 — Susun Output Terstruktur
+    # ------------------------------------------------------------------
+    status_kelayakan = [
+        {"kode": k, "nama": status_kurban_db.get(k, "Tidak Diketahui")}
+        for k in kelayakan_terdeteksi
+    ]
+
+    if "K02" in kelayakan_terdeteksi:
         pesan = "Sapi dinyatakan TIDAK LAYAK KURBAN karena memenuhi kriteria cacat fisik atau terindikasi penyakit akut."
-    elif "P13" in kode_kesimpulan:
+    elif "K01" in kelayakan_terdeteksi:
         pesan = "Sapi dinyatakan LAYAK KURBAN dan memenuhi syariat ketentuan hewan kurban."
     elif penyakit_terdeteksi:
         pesan = "Sapi terindikasi memiliki gejala klinis ringan. Disarankan konsultasi dengan mantri/dokter hewan sebelum mengambil keputusan."
     else:
         pesan = "Gejala tidak mengarah ke indikasi penyakit spesifik. Silakan periksa kembali kondisi fisik sapi."
-        
+
+    return penyakit_terdeteksi, status_kelayakan, pesan
+
+
+# ===========================================================================
+# ENDPOINT API
+# ===========================================================================
+
+@app.get("/")
+def beranda():
+    return {"pesan": "Selamat datang di API Sistem Pakar Sapi Kurban - PrimeCow v2!"}
+
+
+@app.get("/api/gejala")
+def get_daftar_gejala():
+    daftar_gejala = [{"kode": k, "nama": v} for k, v in kb["gejala"].items()]
+    return {"status": "success", "data": daftar_gejala}
+
+
+@app.get("/api/status-kurban")
+def get_status_kurban():
+    data = [{"kode": k, "nama": v} for k, v in status_kurban_db.items()]
+    return {"status": "success", "data": data}
+
+
+@app.post("/api/diagnosa")
+def diagnosa_sapi(data: GejalaInput):
+    gejala_set = set(data.gejala)
+    penyakit_terdeteksi, status_kelayakan, pesan = jalankan_diagnosa(gejala_set)
+
     return {
         "status": "success",
         "pesan": pesan,
